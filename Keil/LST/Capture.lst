@@ -1,0 +1,85 @@
+C51 COMPILER V9.60.0.0   CAPTURE                                                           08/22/2022 03:17:18 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE CAPTURE
+OBJECT MODULE PLACED IN .\Output\Capture.obj
+COMPILER INVOKED BY: C:\Keil_v5_8051\C51\BIN\C51.EXE ..\Capture.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\..\..\Library\De
+                    -vice\Include;..\..\..\..\Library\StdDriver\inc;..\..\Timer2_AutoReload_Capture) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND P
+                    -RINT(.\LST\Capture.lst) TABS(2) OBJECT(.\Output\Capture.obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2020 nuvoton Technology Corp. All rights reserved.                                        
+             - */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          /*********************************************************************************************************
+             -**/
+   8          /* Website: http://www.nuvoton.com                                                                        
+             - */
+   9          /*  E-Mail : MicroC-8bit@nuvoton.com                                                                      
+             - */
+  10          /*  Date   : Jan/21/2020                                                                                  
+             - */
+  11          /*********************************************************************************************************
+             -**/
+  12          
+  13          /*********************************************************************************************************
+             -***/
+  14          /*  File Function: MS51 Timer 2 capture function demo                                                     
+             -  */
+  15          //********************************************************************************************************
+             -***/
+  16          #include "IR.h"
+  17          #include "millis.h"
+  18          uint32_t u32Cmd, time;
+  19          /*********************************************************************************************************
+             -***/
+  20          /*    Main function                                                                                       
+             -  */
+  21          /*********************************************************************************************************
+             -***/
+  22          void main (void)
+  23          {
+  24   1          P15_PUSHPULL_MODE;
+  25   1          P15 = 0;
+  26   1          
+  27   1          millis_init();
+  28   1          IR_Init();
+  29   1        
+  30   1          while (1) {
+  31   2          if (IR_Check(&u32Cmd)) {
+  32   3            switch (u32Cmd) {
+  33   4            case BUTTON1:
+  34   4              P15 = 0;
+  35   4              break;
+  36   4            case BUTTON2:
+  37   4              P15 = 1;
+C51 COMPILER V9.60.0.0   CAPTURE                                                           08/22/2022 03:17:18 PAGE 2   
+
+  38   4              break;
+  39   4            }
+  40   3          }     
+  41   2          }
+  42   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     80    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

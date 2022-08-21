@@ -1,0 +1,8 @@
+".\Output\Capture.obj",
+".\Output\IR.obj",
+".\Output\millis.obj",
+".\Output\sys.obj",
+".\Output\STARTUP.obj" 
+TO ".\Output\Capture" 
+PRINT(".\LST\Capture.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

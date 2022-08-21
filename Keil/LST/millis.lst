@@ -1,0 +1,60 @@
+C51 COMPILER V9.60.0.0   MILLIS                                                            08/22/2022 01:57:59 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MILLIS
+OBJECT MODULE PLACED IN .\Output\millis.obj
+COMPILER INVOKED BY: C:\Keil_v5_8051\C51\BIN\C51.EXE ..\millis.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\..\..\Library\Dev
+                    -ice\Include;..\..\..\..\Library\StdDriver\inc;..\..\Timer2_AutoReload_Capture) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PR
+                    -INT(.\LST\millis.lst) TABS(2) OBJECT(.\Output\millis.obj)
+
+line level    source
+
+   1          #include "millis.h"
+   2          uint32_t tick_ms = 0;
+   3          
+   4          #define TH0_INIT        0xC1
+   5          #define TL0_INIT        0xE0
+   6          
+   7          void Timer0_ISR (void) interrupt 1  //interrupt address is 0x000B
+   8          {
+   9   1          _push_(SFRS);
+  10   1      
+  11   1          TH0 = TH0_INIT;
+  12   1          TL0 = TL0_INIT;
+  13   1          tick_ms++;
+  14   1      
+  15   1          _pop_(SFRS);
+  16   1      }
+  17          
+  18          void millis_init(void)
+  19          {
+  20   1          ENABLE_TIMER0_MODE1;
+  21   1          TIMER0_FSYS;
+  22   1      
+  23   1          TH0 = TH0_INIT;
+  24   1          TL0 = TL0_INIT;
+  25   1      
+  26   1          ENABLE_TIMER0_INTERRUPT;                       //enable Timer0 interrupt
+  27   1          ENABLE_GLOBAL_INTERRUPT;                       //enable interrupts
+  28   1      
+  29   1          set_TCON_TR0;                                  //Timer0 run
+  30   1      }
+  31          
+  32          uint32_t millis(void)
+  33          {
+  34   1          return tick_ms;
+  35   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     71    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
