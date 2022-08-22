@@ -9,6 +9,6 @@
 
 void IR_Init(void);
 
-uint8_t IR_Check(uint32_t *pu32Cmd, uint8_t encode);
+uint8_t IR_Check(uint32_t *pu32Cmd, uint8_t pair_mode);
 
 #endif

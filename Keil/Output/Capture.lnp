@@ -2,7 +2,9 @@
 ".\Output\IR.obj",
 ".\Output\millis.obj",
 ".\Output\board.obj",
+".\Output\button.obj",
 ".\Output\sys.obj",
+".\Output\watchdog.obj",
 ".\Output\STARTUP.obj" 
 TO ".\Output\Capture" 
 PRINT(".\LST\Capture.m51") RAMSIZE(256) 

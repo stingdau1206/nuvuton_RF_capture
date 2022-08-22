@@ -1,0 +1,1 @@
+"..\board.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\..\..\..\Library\Device\Include;..\..\..\..\Library\StdDriver\inc;..\..\Timer2_AutoReload_Capture) DEFINE (FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\board.lst) TABS (2) OBJECT(.\Output\board.obj)

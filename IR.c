@@ -1,5 +1,6 @@
 #include "IR.h"
-
+#include "board.h"
+#include "millis.h"
 #define IR_IN_VAL P15
 
 #define NUM_BIT 24
@@ -22,7 +23,7 @@ static void cap_init(void);
 
 typedef void (*pfunc)(void);
 
-uint32_t button_state[4];
+uint32_t button_state[4] = {0};
 uint8_t index = 0;
 
 void idle_state(void);
@@ -123,6 +124,7 @@ void check_bit_1_state(void)
 
 void decode_succ_state(void)
 {
+	int i;
 	if (button_state[index] != u32Result)
 	{
 		if (index < 1)
@@ -132,6 +134,11 @@ void decode_succ_state(void)
 		else if (button_state[index - 1] != u32Result)
 		{
 			button_state[index] = u32Result;
+		}
+		for(i = 0; i < index*2; i++)
+		{
+			PAIR_OUT_PIN = !PAIR_OUT_PIN;
+			delay_ms(200);
 		}
 	}
 	else
@@ -162,7 +169,7 @@ void IR_Init(void)
 	tim2_init();
 }
 
-uint8_t IR_Check(uint32_t *pu32Cmd, uint8_t encode)
+uint8_t IR_Check(uint32_t *pu32Cmd, uint8_t pair_mode)
 {
 	if (TF2)
 	{
@@ -176,12 +183,15 @@ uint8_t IR_Check(uint32_t *pu32Cmd, uint8_t encode)
 		if (u8Count == NUM_BIT)
 		{
 			u8Count = 0;
-			if(!encode)
+			if(pair_mode)
 			{
-				// decode_succ_state();
+				decode_succ_state();
+			}
+			else
+			{
+				*pu32Cmd = u32Result;
 			}
 			u8State = STATE_IDLE;
-			*pu32Cmd = u32Result;
 			return 1;
 		}
 	}

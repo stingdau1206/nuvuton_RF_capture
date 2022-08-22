@@ -1,0 +1,1 @@
+"..\button.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\..\..\..\Library\Device\Include;..\..\..\..\Library\StdDriver\inc;..\..\Timer2_AutoReload_Capture) DEFINE (FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\button.lst) TABS (2) OBJECT(.\Output\button.obj)

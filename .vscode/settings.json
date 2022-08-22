@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "INT0.C": "cpp"
+        "INT0.C": "cpp",
+        "INT1.C": "cpp"
     }
 }

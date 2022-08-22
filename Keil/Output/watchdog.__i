@@ -1,0 +1,1 @@
+"..\..\..\..\Library\StdDriver\src\watchdog.c" OPTIMIZE (8,SPEED) BROWSE INCDIR(..\..\..\..\Library\Device\Include;..\..\..\..\Library\StdDriver\inc;..\..\Timer2_AutoReload_Capture) DEFINE (FOSC_160000) DEBUG OBJECTEXTEND PRINT(.\LST\watchdog.lst) TABS (2) OBJECT(.\Output\watchdog.obj)

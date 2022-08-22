@@ -8,6 +8,7 @@
 #define LED_OUT_PIN     P06
 #define LOCK_OUT_PIN    P07
 #define PAIR_OUT_PIN    P30
+#define PAIR_IN_PIN     P17
 
 void board_io_init(void);
 

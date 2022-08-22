@@ -1,0 +1,94 @@
+C51 COMPILER V9.60.0.0   BUTTON                                                            08/23/2022 01:49:40 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE BUTTON
+OBJECT MODULE PLACED IN .\Output\button.obj
+COMPILER INVOKED BY: C:\Keil_v5_8051\C51\BIN\C51.EXE ..\button.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\..\..\Library\Dev
+                    -ice\Include;..\..\..\..\Library\StdDriver\inc;..\..\Timer2_AutoReload_Capture) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PR
+                    -INT(.\LST\button.lst) TABS(2) OBJECT(.\Output\button.obj)
+
+line level    source
+
+   1          #include "button.h"
+   2          #include "millis.h"
+   3          #include "board.h"
+   4          
+   5          #define DEBOUNCE_DELAY 15
+   6          #define PRESS_HOLD_TIME 2000
+   7          
+   8          uint32_t lastDebounceTime = 0;
+   9          uint8_t preState;
+  10          uint8_t flag_button = 0;
+  11          uint8_t currentState = 1;
+  12          uint8_t lastAfterFilterNoiseState = 0;
+  13          uint32_t state_time;
+  14          
+  15          void INT0_ISR(void) interrupt 2          // Vector @  0x03
+  16          {
+  17   1          _push_(SFRS);
+  18   1      
+  19   1          clr_TCON_IE1;          //clr int flag wait next falling edge
+  20   1          preState = 1;
+  21   1          flag_button = 1;
+  22   1      
+  23   1          _pop_(SFRS);
+  24   1      }
+  25          
+  26          void button_init()
+  27          {
+  28   1          P17_INPUT_MODE;
+  29   1          INT1_FALLING_EDGE_TRIG;              //setting trig condition level or edge
+  30   1          set_IE_EX1;                         //INT0_Enable;
+  31   1          ENABLE_GLOBAL_INTERRUPT;            //Global interrupt enable
+  32   1      }
+  33          
+  34          button_state_t button_handle()
+  35          {
+  36   1          if (flag_button)
+  37   1          {
+  38   2              currentState = PAIR_IN_PIN;
+  39   2              if (currentState != lastAfterFilterNoiseState)
+  40   2              {
+  41   3                  lastDebounceTime = millis();
+  42   3                  lastAfterFilterNoiseState = currentState;
+  43   3              }
+  44   2              if ((millis() - lastDebounceTime) > DEBOUNCE_DELAY)
+  45   2              {
+  46   3                  if (preState == 1 && currentState == 0)
+  47   3                  {
+  48   4                      preState = currentState;
+  49   4                      return SHORT_PRESSED;
+  50   4                  }
+  51   3                  else if (preState == 0 && currentState == 0)
+  52   3                  {
+  53   4                      if (millis() - lastDebounceTime > PRESS_HOLD_TIME)
+C51 COMPILER V9.60.0.0   BUTTON                                                            08/23/2022 01:49:40 PAGE 2   
+
+  54   4                      {
+  55   5                          flag_button = 0;
+  56   5                          return LONG_PRESSED;
+  57   5                      }
+  58   4                  }
+  59   3                  else
+  60   3                  {
+  61   4                      flag_button = 0;
+  62   4                      return REALESED;
+  63   4                  }
+  64   3              }
+  65   2          }
+  66   1          return NONE;
+  67   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    182    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     12    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
