@@ -1,0 +1,55 @@
+C51 COMPILER V9.60.0.0   BOARD                                                             08/22/2022 20:42:52 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE BOARD
+OBJECT MODULE PLACED IN .\Output\board.obj
+COMPILER INVOKED BY: C:\Keil_v5_8051\C51\BIN\C51.EXE ..\board.c OPTIMIZE(8,SPEED) BROWSE INCDIR(..\..\..\..\Library\Devi
+                    -ce\Include;..\..\..\..\Library\StdDriver\inc;..\..\Timer2_AutoReload_Capture) DEFINE(FOSC_160000) DEBUG OBJECTEXTEND PRI
+                    -NT(.\LST\board.lst) TABS(2) OBJECT(.\Output\board.obj)
+
+line level    source
+
+   1          #include "board.h"
+   2          
+   3          void board_io_init(void)
+   4          {
+   5   1          P10_PUSHPULL_MODE;
+   6   1          P11_PUSHPULL_MODE;
+   7   1          P06_PUSHPULL_MODE;
+   8   1          P07_PUSHPULL_MODE;
+   9   1      
+  10   1          SPEAKER_OUT_PIN = 1;
+  11   1          LED_OUT_PIN = 0;
+  12   1          LOCK_OUT_PIN = 0;
+  13   1          XINHAN_OUT_PIN = 0;
+  14   1      }
+  15          
+  16          void board_pwm_init(void)
+  17          {
+  18   1        CLRPWM = 1;
+  19   1        CKCON &= ~(1 << 6);
+  20   1        PWMCON1 &= 0x07;
+  21   1        PWMCON1 |= 0x00;
+  22   1        PWMPH = 0x3e;
+  23   1        PWMPL = 0x7f;
+  24   1        PWM3H = 0x1f;
+  25   1        PWM3L = 0x40;
+  26   1        P0M1 &= ~(1 << 0);
+  27   1        P0M2 |= (1 << 0);
+  28   1        PIOCON0 |= (1 << 3);
+  29   1        PWMRUN = 0;
+  30   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    138    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

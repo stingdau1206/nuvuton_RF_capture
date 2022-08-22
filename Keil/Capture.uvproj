@@ -391,6 +391,11 @@
               <FileType>1</FileType>
               <FilePath>..\millis.c</FilePath>
             </File>
+            <File>
+              <FileName>board.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\board.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

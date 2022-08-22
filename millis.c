@@ -33,3 +33,12 @@ uint32_t millis(void)
 {
     return tick_ms;
 }
+
+void delay_ms(uint32_t ms)
+{
+    int i = 0;
+    for(i = 0; i < ms; i++)
+    {
+        _delay_();
+    }
+}

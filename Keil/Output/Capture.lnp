@@ -1,6 +1,7 @@
 ".\Output\Capture.obj",
 ".\Output\IR.obj",
 ".\Output\millis.obj",
+".\Output\board.obj",
 ".\Output\sys.obj",
 ".\Output\STARTUP.obj" 
 TO ".\Output\Capture" 

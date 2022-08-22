@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "board.h": "c",
+        "ir.h": "c",
+        "millis.h": "c"
+    }
+}
