@@ -14,6 +14,7 @@
 
 static void tim2_init(void);
 static void cap_init(void);
+extern uint8_t pair_flag;
 
 #define STATE_IDLE 0
 #define STATE_RECEIVE 1
@@ -144,6 +145,10 @@ void decode_succ_state(void)
 	else
 	{
 		index++;
+		if(index == 3)
+		{
+			pair_flag = 0;
+		}
 	}
 }
 

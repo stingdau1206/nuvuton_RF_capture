@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   IR                                                                08/23/2022 01:42:58 PAGE 1   
+C51 COMPILER V9.60.0.0   IR                                                                08/23/2022 23:03:28 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE IR
@@ -25,199 +25,204 @@ line level    source
   14          
   15          static void tim2_init(void);
   16          static void cap_init(void);
-  17          
-  18          #define STATE_IDLE 0
-  19          #define STATE_RECEIVE 1
-  20          #define STATE_CHECK_BIT_0 2
-  21          #define STATE_CHECK_BIT_1 3
-  22          #define STATE_DECODE_SUCC 4
-  23          
-  24          typedef void (*pfunc)(void);
-  25          
-  26          uint32_t button_state[4] = {0};
-  27          uint8_t index = 0;
-  28          
-  29          void idle_state(void);
-  30          void receive_state(void);
-  31          void check_bit_0_state(void);
-  32          void check_bit_1_state(void);
-  33          void decode_succ_state(void);
-  34          
-  35          static pfunc funcSet[] = {
-  36            idle_state,
-  37            receive_state,
-  38            check_bit_0_state,
-  39            check_bit_1_state,
-  40            decode_succ_state};
-  41          
-  42          static uint8_t u8State = STATE_IDLE;
-  43          static uint8_t u8Count = 0;
-  44          static uint32_t u32Result = 0;
-  45          
-  46          void idle_state(void)
-  47          {
-  48   1        uint16_t u16Tmp;
-  49   1        if (IR_IN_VAL)
-  50   1        {
-  51   2          u16Tmp = C0H * 256 + C0L;
-  52   2          if (u16Tmp > START_MIN && u16Tmp < START_MAX)
-  53   2          {
-C51 COMPILER V9.60.0.0   IR                                                                08/23/2022 01:42:58 PAGE 2   
+  17          extern uint8_t pair_flag;
+  18          
+  19          #define STATE_IDLE 0
+  20          #define STATE_RECEIVE 1
+  21          #define STATE_CHECK_BIT_0 2
+  22          #define STATE_CHECK_BIT_1 3
+  23          #define STATE_DECODE_SUCC 4
+  24          
+  25          typedef void (*pfunc)(void);
+  26          
+  27          uint32_t button_state[4] = {0};
+  28          uint8_t index = 0;
+  29          
+  30          void idle_state(void);
+  31          void receive_state(void);
+  32          void check_bit_0_state(void);
+  33          void check_bit_1_state(void);
+  34          void decode_succ_state(void);
+  35          
+  36          static pfunc funcSet[] = {
+  37            idle_state,
+  38            receive_state,
+  39            check_bit_0_state,
+  40            check_bit_1_state,
+  41            decode_succ_state};
+  42          
+  43          static uint8_t u8State = STATE_IDLE;
+  44          static uint8_t u8Count = 0;
+  45          static uint32_t u32Result = 0;
+  46          
+  47          void idle_state(void)
+  48          {
+  49   1        uint16_t u16Tmp;
+  50   1        if (IR_IN_VAL)
+  51   1        {
+  52   2          u16Tmp = C0H * 256 + C0L;
+  53   2          if (u16Tmp > START_MIN && u16Tmp < START_MAX)
+C51 COMPILER V9.60.0.0   IR                                                                08/23/2022 23:03:28 PAGE 2   
 
-  54   3            u8Count = 0;
-  55   3            u32Result = 0;
-  56   3            u8State = STATE_RECEIVE;
-  57   3          }
-  58   2          else
-  59   2          {
-  60   3            u8State = STATE_IDLE;
-  61   3          }
-  62   2        }
-  63   1      }
-  64          
-  65          void receive_state(void)
-  66          {
-  67   1        uint16_t u16Tmp;
-  68   1        if (!IR_IN_VAL)
-  69   1        {
-  70   2          u16Tmp = C0H * 256 + C0L;
-  71   2          if (u16Tmp > SECOND_MIN && u16Tmp < SECOND_MAX)
-  72   2          {
-  73   3            u32Result <<= 1;
-  74   3            ++u8Count;
-  75   3            u8State = STATE_CHECK_BIT_0;
-  76   3          }
-  77   2          else if (u16Tmp > PRIMARY_MIN && u16Tmp < PRIMARY_MAX)
-  78   2          {
-  79   3            u32Result <<= 1;
-  80   3            u32Result |= 1;
-  81   3            ++u8Count;
-  82   3            u8State = STATE_CHECK_BIT_1;
-  83   3          }
-  84   2          else
-  85   2          {
-  86   3            u8State = STATE_IDLE;
-  87   3          }
-  88   2        }
-  89   1      }
-  90          
-  91          void check_bit_0_state(void)
-  92          {
-  93   1        uint16_t u16Tmp;
-  94   1        if (IR_IN_VAL)
-  95   1        {
-  96   2          u16Tmp = C0H * 256 + C0L;
-  97   2          if (u16Tmp > PRIMARY_MIN && u16Tmp < PRIMARY_MAX)
-  98   2          {
-  99   3            u8State = STATE_RECEIVE;
- 100   3          }
- 101   2          else
- 102   2          {
- 103   3            u8State = STATE_IDLE;
- 104   3          }
- 105   2        }
- 106   1      }
- 107          
- 108          void check_bit_1_state(void)
- 109          {
- 110   1        uint16_t u16Tmp;
- 111   1        if (IR_IN_VAL)
- 112   1        {
- 113   2          u16Tmp = C0H * 256 + C0L;
- 114   2          if (u16Tmp > SECOND_MIN && u16Tmp < SECOND_MAX)
- 115   2          {
-C51 COMPILER V9.60.0.0   IR                                                                08/23/2022 01:42:58 PAGE 3   
+  54   2          {
+  55   3            u8Count = 0;
+  56   3            u32Result = 0;
+  57   3            u8State = STATE_RECEIVE;
+  58   3          }
+  59   2          else
+  60   2          {
+  61   3            u8State = STATE_IDLE;
+  62   3          }
+  63   2        }
+  64   1      }
+  65          
+  66          void receive_state(void)
+  67          {
+  68   1        uint16_t u16Tmp;
+  69   1        if (!IR_IN_VAL)
+  70   1        {
+  71   2          u16Tmp = C0H * 256 + C0L;
+  72   2          if (u16Tmp > SECOND_MIN && u16Tmp < SECOND_MAX)
+  73   2          {
+  74   3            u32Result <<= 1;
+  75   3            ++u8Count;
+  76   3            u8State = STATE_CHECK_BIT_0;
+  77   3          }
+  78   2          else if (u16Tmp > PRIMARY_MIN && u16Tmp < PRIMARY_MAX)
+  79   2          {
+  80   3            u32Result <<= 1;
+  81   3            u32Result |= 1;
+  82   3            ++u8Count;
+  83   3            u8State = STATE_CHECK_BIT_1;
+  84   3          }
+  85   2          else
+  86   2          {
+  87   3            u8State = STATE_IDLE;
+  88   3          }
+  89   2        }
+  90   1      }
+  91          
+  92          void check_bit_0_state(void)
+  93          {
+  94   1        uint16_t u16Tmp;
+  95   1        if (IR_IN_VAL)
+  96   1        {
+  97   2          u16Tmp = C0H * 256 + C0L;
+  98   2          if (u16Tmp > PRIMARY_MIN && u16Tmp < PRIMARY_MAX)
+  99   2          {
+ 100   3            u8State = STATE_RECEIVE;
+ 101   3          }
+ 102   2          else
+ 103   2          {
+ 104   3            u8State = STATE_IDLE;
+ 105   3          }
+ 106   2        }
+ 107   1      }
+ 108          
+ 109          void check_bit_1_state(void)
+ 110          {
+ 111   1        uint16_t u16Tmp;
+ 112   1        if (IR_IN_VAL)
+ 113   1        {
+ 114   2          u16Tmp = C0H * 256 + C0L;
+ 115   2          if (u16Tmp > SECOND_MIN && u16Tmp < SECOND_MAX)
+C51 COMPILER V9.60.0.0   IR                                                                08/23/2022 23:03:28 PAGE 3   
 
- 116   3            u8State = STATE_RECEIVE;
- 117   3          }
- 118   2          else
- 119   2          {
- 120   3            u8State = STATE_IDLE;
- 121   3          }
- 122   2        }
- 123   1      }
- 124          
- 125          void decode_succ_state(void)
- 126          {
- 127   1        int i;
- 128   1        if (button_state[index] != u32Result)
- 129   1        {
- 130   2          if (index < 1)
- 131   2          {
- 132   3            button_state[index] = u32Result;
- 133   3          }
- 134   2          else if (button_state[index - 1] != u32Result)
- 135   2          {
- 136   3            button_state[index] = u32Result;
- 137   3          }
- 138   2          for(i = 0; i < index*2; i++)
- 139   2          {
- 140   3            PAIR_OUT_PIN = !PAIR_OUT_PIN;
- 141   3            delay_ms(200);
- 142   3          }
- 143   2        }
- 144   1        else
- 145   1        {
- 146   2          index++;
- 147   2        }
- 148   1      }
- 149          
- 150          static void tim2_init(void)
- 151          {
- 152   1        TIMER2_CAP0_Capture_Mode;
- 153   1      
- 154   1        TIMER2_DIV_16;
- 155   1        set_T2CON_TR2;
- 156   1      }
- 157          
- 158          static void cap_init(void)
- 159          {
- 160   1        IC7_P15_CAP0_BOTHEDGE_CAPTURE;
+ 116   2          {
+ 117   3            u8State = STATE_RECEIVE;
+ 118   3          }
+ 119   2          else
+ 120   2          {
+ 121   3            u8State = STATE_IDLE;
+ 122   3          }
+ 123   2        }
+ 124   1      }
+ 125          
+ 126          void decode_succ_state(void)
+ 127          {
+ 128   1        int i;
+ 129   1        if (button_state[index] != u32Result)
+ 130   1        {
+ 131   2          if (index < 1)
+ 132   2          {
+ 133   3            button_state[index] = u32Result;
+ 134   3          }
+ 135   2          else if (button_state[index - 1] != u32Result)
+ 136   2          {
+ 137   3            button_state[index] = u32Result;
+ 138   3          }
+ 139   2          for(i = 0; i < index*2; i++)
+ 140   2          {
+ 141   3            PAIR_OUT_PIN = !PAIR_OUT_PIN;
+ 142   3            delay_ms(200);
+ 143   3          }
+ 144   2        }
+ 145   1        else
+ 146   1        {
+ 147   2          index++;
+ 148   2          if(index == 3)
+ 149   2          {
+ 150   3            pair_flag = 0;
+ 151   3          }
+ 152   2        }
+ 153   1      }
+ 154          
+ 155          static void tim2_init(void)
+ 156          {
+ 157   1        TIMER2_CAP0_Capture_Mode;
+ 158   1      
+ 159   1        TIMER2_DIV_16;
+ 160   1        set_T2CON_TR2;
  161   1      }
  162          
- 163          void IR_Init(void)
+ 163          static void cap_init(void)
  164          {
- 165   1        u8State = STATE_IDLE;
- 166   1        u32Result = 0;
- 167   1        u8Count = 0;
- 168   1        cap_init();
- 169   1        tim2_init();
- 170   1      }
- 171          
- 172          uint8_t IR_Check(uint32_t *pu32Cmd, uint8_t pair_mode)
- 173          {
- 174   1        if (TF2)
- 175   1        {
- 176   2          TF2 = 0;
- 177   2          u8State = STATE_IDLE;
-C51 COMPILER V9.60.0.0   IR                                                                08/23/2022 01:42:58 PAGE 4   
+ 165   1        IC7_P15_CAP0_BOTHEDGE_CAPTURE;
+ 166   1      }
+ 167          
+ 168          void IR_Init(void)
+ 169          {
+ 170   1        u8State = STATE_IDLE;
+ 171   1        u32Result = 0;
+ 172   1        u8Count = 0;
+ 173   1        cap_init();
+ 174   1        tim2_init();
+ 175   1      }
+ 176          
+ 177          uint8_t IR_Check(uint32_t *pu32Cmd, uint8_t pair_mode)
+C51 COMPILER V9.60.0.0   IR                                                                08/23/2022 23:03:28 PAGE 4   
 
- 178   2        }
- 179   1        if (CAPCON0 & (1 << 0))
+ 178          {
+ 179   1        if (TF2)
  180   1        {
- 181   2          funcSet[u8State]();
- 182   2          CAPCON0 &= ~(1 << 0);
- 183   2          if (u8Count == NUM_BIT)
- 184   2          {
- 185   3            u8Count = 0;
- 186   3            if(pair_mode)
- 187   3            {
- 188   4              decode_succ_state();
- 189   4            }
- 190   3            else
- 191   3            {
- 192   4              *pu32Cmd = u32Result;
- 193   4            }
- 194   3            u8State = STATE_IDLE;
- 195   3            return 1;
- 196   3          }
- 197   2        }
- 198   1        return 0;
- 199   1      }
+ 181   2          TF2 = 0;
+ 182   2          u8State = STATE_IDLE;
+ 183   2        }
+ 184   1        if (CAPCON0 & (1 << 0))
+ 185   1        {
+ 186   2          funcSet[u8State]();
+ 187   2          CAPCON0 &= ~(1 << 0);
+ 188   2          if (u8Count == NUM_BIT)
+ 189   2          {
+ 190   3            u8Count = 0;
+ 191   3            if(pair_mode)
+ 192   3            {
+ 193   4              decode_succ_state();
+ 194   4            }
+ 195   3            else
+ 196   3            {
+ 197   4              *pu32Cmd = u32Result;
+ 198   4            }
+ 199   3            u8State = STATE_IDLE;
+ 200   3            return 1;
+ 201   3          }
+ 202   2        }
+ 203   1        return 0;
+ 204   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    541    ----
+   CODE SIZE        =    549    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
