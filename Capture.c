@@ -85,7 +85,7 @@ static void open_lock_handle()
 	XINHAN_OUT_PIN = 0;
 	delay_ms(2000);
 	PWMRUN = 0;
-	LOCK_OUT_PIN = 0;
+	LOCK_OUT_PIN = 1;
 	count_open = 0;
 }
 
