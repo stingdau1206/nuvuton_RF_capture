@@ -3,13 +3,12 @@
         {
             "name": "Timer2_Capture",
             "includePath": [
-                "d:\\nuvuton\\MS51_Series_BSP_Keil_V1.00.004\\MS51FB9AE_MS51XB9AE_MS51XB9BE\\Library\\Device\\Include",
-                "d:\\nuvuton\\MS51_Series_BSP_Keil_V1.00.004\\MS51FB9AE_MS51XB9AE_MS51XB9BE\\Library\\StdDriver\\inc",
-                "d:\\nuvuton\\MS51_Series_BSP_Keil_V1.00.004\\MS51FB9AE_MS51XB9AE_MS51XB9BE\\SampleCode\\MyProjects\\Timer2_AutoReload_Capture",
+                "d:\\Nuvuton\\MS51_Series_BSP_Keil_V1.00.004\\MS51FB9AE_MS51XB9AE_MS51XB9BE\\Library\\Device\\Include",
+                "d:\\Nuvuton\\MS51_Series_BSP_Keil_V1.00.004\\MS51FB9AE_MS51XB9AE_MS51XB9BE\\Library\\StdDriver\\inc",
+                "d:\\Nuvuton\\MS51_Series_BSP_Keil_V1.00.004\\MS51FB9AE_MS51XB9AE_MS51XB9BE\\SampleCode\\MyProjects\\Timer2_AutoReload_Capture",
                 "C:\\Keil_v5_8051\\C51\\INC",
-                "d:\\nuvuton\\MS51_Series_BSP_Keil_V1.00.004\\MS51FB9AE_MS51XB9AE_MS51XB9BE\\SampleCode\\MyProjects\\nuvuton_RF_capture",
-                "d:\\nuvuton\\MS51_Series_BSP_Keil_V1.00.004\\MS51FB9AE_MS51XB9AE_MS51XB9BE\\Library\\StdDriver\\src",
-                "d:\\nuvuton\\MS51_Series_BSP_Keil_V1.00.004\\MS51FB9AE_MS51XB9AE_MS51XB9BE\\Library\\Startup\\Keil"
+                "d:\\Nuvuton\\MS51_Series_BSP_Keil_V1.00.004\\MS51FB9AE_MS51XB9AE_MS51XB9BE\\Library\\StdDriver\\src",
+                "d:\\Nuvuton\\MS51_Series_BSP_Keil_V1.00.004\\MS51FB9AE_MS51XB9AE_MS51XB9BE\\Library\\Startup\\Keil"
             ],
             "defines": [
                 "FOSC_160000",

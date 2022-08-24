@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   IR                                                                08/23/2022 23:06:16 PAGE 1   
+C51 COMPILER V9.60.0.0   IR                                                                08/25/2022 00:23:29 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE IR
@@ -62,7 +62,7 @@ line level    source
   51   2          if (u16Tmp > START_MIN && u16Tmp < START_MAX)
   52   2          {
   53   3            u8Count = 0;
-C51 COMPILER V9.60.0.0   IR                                                                08/23/2022 23:06:16 PAGE 2   
+C51 COMPILER V9.60.0.0   IR                                                                08/25/2022 00:23:29 PAGE 2   
 
   54   3            u32Result = 0;
   55   3            u8State = STATE_RECEIVE;
@@ -126,7 +126,7 @@ line level    source
  113   2          if (u16Tmp > SECOND_MIN && u16Tmp < SECOND_MAX)
  114   2          {
  115   3            u8State = STATE_RECEIVE;
-C51 COMPILER V9.60.0.0   IR                                                                08/23/2022 23:06:16 PAGE 3   
+C51 COMPILER V9.60.0.0   IR                                                                08/25/2022 00:23:29 PAGE 3   
 
  116   3          }
  117   2          else
@@ -190,7 +190,7 @@ line level    source
  175   2          CAPCON0 &= ~(1 << 0);
  176   2          if (u8Count == NUM_BIT)
  177   2          {
-C51 COMPILER V9.60.0.0   IR                                                                08/23/2022 23:06:16 PAGE 4   
+C51 COMPILER V9.60.0.0   IR                                                                08/25/2022 00:23:29 PAGE 4   
 
  178   3            u8Count = 0;
  179   3            if(!encode)
