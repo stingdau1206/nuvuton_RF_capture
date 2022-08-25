@@ -83,7 +83,8 @@ void main(void)
 				{
 				case FIND_BUTTON:
 					find_flag = 1;
-					count_find = 0;
+					if(count_find > 6)
+						count_find = 0;
 					break;
 				case KEY_BUTTON:
 					count_key++;
