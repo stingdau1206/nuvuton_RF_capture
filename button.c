@@ -11,6 +11,7 @@ uint8_t flag_button = 0;
 uint8_t currentState = 1;
 uint8_t lastAfterFilterNoiseState = 0;
 uint32_t state_time;
+extern uint8_t index;
 
 void INT0_ISR(void) interrupt 2          // Vector @  0x03
 {
@@ -19,7 +20,7 @@ void INT0_ISR(void) interrupt 2          // Vector @  0x03
     clr_TCON_IE1;          //clr int flag wait next falling edge
     preState = 1;
     flag_button = 1;
-
+    index = 0; //
     _pop_(SFRS);
 }
 

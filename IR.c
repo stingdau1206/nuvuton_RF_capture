@@ -1,6 +1,8 @@
 #include "IR.h"
 #include "board.h"
 #include "millis.h"
+#include "eeprom.h"
+
 #define IR_IN_VAL P15
 
 #define NUM_BIT 24
@@ -131,23 +133,25 @@ void decode_succ_state(void)
 		if (index < 1)
 		{
 			button_state[index] = u32Result;
+			index++;
 		}
 		else if (button_state[index - 1] != u32Result)
 		{
 			button_state[index] = u32Result;
+			index++;
 		}
 		for(i = 0; i < index*2; i++)
 		{
 			PAIR_OUT_PIN = !PAIR_OUT_PIN;
 			delay_ms(200);
 		}
-	}
-	else
-	{
-		index++;
 		if(index == 3)
 		{
-			pair_flag = 0;
+			index = 0;
+			for(i = 0; i < 3; i++)
+			{
+				Write_DATAFLASH_ARRAY(ADDRESS_APROM + 4*i, (uint8_t *)&button_state[i], 4);
+			}
 		}
 	}
 }
@@ -167,15 +171,21 @@ static void cap_init(void)
 
 void IR_Init(void)
 {
+	int i;
 	u8State = STATE_IDLE;
 	u32Result = 0;
 	u8Count = 0;
 	cap_init();
 	tim2_init();
+	for(i = 0; i < 3; i++)
+	{
+		Read_DATAFLASH_ARRAY(ADDRESS_APROM + 4*i, (uint8_t *)&button_state[i], 4);
+	}
 }
 
 uint8_t IR_Check(uint32_t *pu32Cmd, uint8_t pair_mode)
 {
+	PAIR_OUT_PIN = !pair_mode;
 	if (TF2)
 	{
 		TF2 = 0;
@@ -183,12 +193,12 @@ uint8_t IR_Check(uint32_t *pu32Cmd, uint8_t pair_mode)
 	}
 	if (CAPCON0 & (1 << 0))
 	{
-		funcSet[u8State]();
+		funcSet[u8State]();  
 		CAPCON0 &= ~(1 << 0);
 		if (u8Count == NUM_BIT)
 		{
 			u8Count = 0;
-			if(pair_mode)
+			if(!pair_mode)
 			{
 				decode_succ_state();
 			}

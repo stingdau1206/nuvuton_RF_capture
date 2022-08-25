@@ -16,17 +16,26 @@
 #include "IR.h"
 #include "millis.h"
 #include "board.h"
-#include "button.h"
 
-static void find_lock_handle();
+#define PERIOD_OPEN 700
+#define PERIOD_CLOSE 300
+
+static void speaker_handle(uint8_t state);
 static void open_lock_handle();
 static void close_lock_handle();
 
-uint32_t u32Cmd, current_time;
-uint8_t count_open = 0;
-uint8_t pair_flag = 0;
+uint32_t u32Cmd, current_time, open_time;
+uint8_t count_key = 0;
+uint8_t count_speaker = 0;
+uint8_t count_find = 0;
+uint8_t key_flag = 0;
+uint8_t speaker_flag = 0;
+uint8_t led_flag = 0;
+uint8_t find_flag = 0;
+uint8_t speaker_state = 0;
+uint8_t key_state = 0;
+
 extern uint32_t button_state[4];
-extern uint8_t index;
 /*********************************************   ***************************************************************/
 /*    Main function                                                                                         */
 /************************************************************************************************************/
@@ -36,73 +45,112 @@ void main(void)
 	IR_Init();
 	board_io_init();
 	board_pwm_init();
-	TA=0xAA;TA=0x55;WDCON|=0x07;                //Setting WDT prescale 
-  set_WDCON_WDCLR;                            //Clear WDT timer
-	set_WDCON_WDTR;
+
+	set_WDCON_WDCLR; // Clear WDT timer
+
 	while (1)
 	{
-		LED_OUT_PIN = 0;
+		set_WDCON_WDCLR;
+
 		current_time = millis();
-		while (millis() - current_time < 20000)
+		if (find_flag)
+		{
+			LED_OUT_PIN = !LED_OUT_PIN;
+			if (count_find < 6)
+			{
+				PWMRUN = !PWMRUN;
+				XINHAN_OUT_PIN = !XINHAN_OUT_PIN;
+			}
+			else
+			{
+				PWMRUN = 0;
+				XINHAN_OUT_PIN = 0;
+			}
+			count_find++;
+			if (count_find >= 40)
+			{
+				PWMRUN = 0;
+				XINHAN_OUT_PIN = 0;
+				LED_OUT_PIN = 0;
+				count_find = 0;
+				find_flag = 0;
+			}
+		}
+		while (millis() - current_time < 500)
 		{
 			set_WDCON_WDCLR;
-			if (IR_Check(&u32Cmd, pair_flag))
+			if (IR_Check(&u32Cmd, PAIR_IN_PIN))
 			{
-				if (u32Cmd == button_state[2])
+
+				if (u32Cmd == button_state[0])
 				{
-					LED_OUT_PIN = 1;
-					current_time = millis();
-					find_lock_handle();
-				}
-				else if (u32Cmd == button_state[0])
-				{
-					count_open++;
-					if (count_open >= 90)
-						open_lock_handle();
+					find_flag = 1;
+					if (count_find > 6)
+						count_find = 0;
 				}
 				else if (u32Cmd == button_state[1])
 				{
-					close_lock_handle();
+					count_key++;
+					if (key_state == 0)
+					{
+						if (count_key >= 70)
+						{
+							open_lock_handle();
+							LED_OUT_PIN = 1;
+							open_time = millis();
+							led_flag = 1;
+						}
+					}
+					else
+					{
+						close_lock_handle();
+					}
+				}
+				else if (u32Cmd == button_state[2])
+				{
+					count_speaker++;
+					if (count_speaker >= 40)
+					{
+						count_speaker = 0;
+						speaker_state = !speaker_state;
+						speaker_handle(speaker_state);
+					}
 				}
 			}
-			switch (button_handle())
-			{
-			case SHORT_PRESSED:
-				index = 0;
-				pair_flag = !pair_flag;
-				PAIR_OUT_PIN = pair_flag;
-				break;
-			default:
-				break;
-			}
 		}
-	}
-}
-
-static void find_lock_handle()
-{
-	int i;
-	for (i = 0; i < 3; i++)
-	{
-		PWMRUN = 1;
-		XINHAN_OUT_PIN = 1;
-		delay_ms(1000);
-		XINHAN_OUT_PIN = 0;
-		PWMRUN = 0;
-		delay_ms(500);
+		if (key_state == 1 && (millis() - open_time) > 10000 && led_flag == 1)
+		{
+			led_flag = 0;
+			LED_OUT_PIN = 0;
+			PWMRUN = 1;
+			delay_ms(PERIOD_OPEN);
+			PWMRUN = 0;
+			delay_ms(PERIOD_CLOSE);
+			set_WDCON_WDCLR;
+			PWMRUN = 1;
+			delay_ms(PERIOD_OPEN);
+			PWMRUN = 0;
+		}
 	}
 }
 
 static void open_lock_handle()
 {
+	set_WDCON_WDCLR;
+	LED_OUT_PIN = 1;
 	PWMRUN = 1;
 	XINHAN_OUT_PIN = 1;
-	delay_ms(1000);
+	delay_ms(PERIOD_OPEN);
 	XINHAN_OUT_PIN = 0;
-	delay_ms(2000);
+	set_WDCON_WDCLR;
+	delay_ms(PERIOD_OPEN);
+	set_WDCON_WDCLR;
+	delay_ms(PERIOD_OPEN);
 	PWMRUN = 0;
 	LOCK_OUT_PIN = 1;
-	count_open = 0;
+	count_key = 0;
+	key_state = 1;
+	LED_OUT_PIN = 0;
 }
 
 static void close_lock_handle()
@@ -110,12 +158,63 @@ static void close_lock_handle()
 	int i;
 	for (i = 0; i < 2; i++)
 	{
+		set_WDCON_WDCLR;
 		PWMRUN = 1;
 		XINHAN_OUT_PIN = 1;
-		delay_ms(1000);
+		delay_ms(PERIOD_OPEN);
 		XINHAN_OUT_PIN = 0;
 		PWMRUN = 0;
-		delay_ms(500);
+		delay_ms(PERIOD_CLOSE);
 	}
+	count_find = 40;
+	LED_OUT_PIN = 0;
+	key_state = 0;
 	LOCK_OUT_PIN = 0;
+}
+
+static void speaker_handle(uint8_t state)
+{
+	if (state)
+	{
+		PWMRUN = 1;
+		XINHAN_OUT_PIN = 1;
+		LED_OUT_PIN = 1;
+		delay_ms(PERIOD_OPEN);
+		PWMRUN = 0;
+		XINHAN_OUT_PIN = 0;
+		LED_OUT_PIN = 0;
+		delay_ms(PERIOD_CLOSE);
+		set_WDCON_WDCLR;
+		XINHAN_OUT_PIN = 1;
+		LED_OUT_PIN = 1;
+		delay_ms(PERIOD_OPEN);
+		XINHAN_OUT_PIN = 0;
+		LED_OUT_PIN = 0;
+		delay_ms(PERIOD_CLOSE);
+		set_WDCON_WDCLR;
+		XINHAN_OUT_PIN = 1;
+		LED_OUT_PIN = 1;
+		delay_ms(PERIOD_OPEN);
+		XINHAN_OUT_PIN = 0;
+		LED_OUT_PIN = 0;
+		set_WDCON_WDCLR;
+	}
+	else
+	{
+		PWMRUN = 1;
+		delay_ms(PERIOD_OPEN);
+		set_WDCON_WDCLR;
+		delay_ms(PERIOD_OPEN);
+		set_WDCON_WDCLR;
+		delay_ms(PERIOD_OPEN);
+		PWMRUN = 0;
+		delay_ms(PERIOD_CLOSE);
+		set_WDCON_WDCLR;
+		PWMRUN = 1;
+		XINHAN_OUT_PIN = 1;
+		delay_ms(PERIOD_OPEN);
+		PWMRUN = 0;
+		XINHAN_OUT_PIN = 0;
+		set_WDCON_WDCLR;
+	}
 }

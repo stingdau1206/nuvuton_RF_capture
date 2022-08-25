@@ -5,7 +5,7 @@
 <h2>Tool Versions:</h2>
 IDE-Version: µVision V5.27.1.0
 Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: tran khoa, tth, LIC=D0MW3-AT6G6-VPQZ0-BQN55-2HWE5-K98TW
+License Information: tran khoa, vntech, LIC=FYURY-IWYRL-KZQW6-DUJBM-A6NJ6-Q2QQC
  
 Tool Versions:
 Toolchain:       PK51 Prof. Developers Kit  Version: 9.60.0.0
@@ -21,23 +21,25 @@ Target DLL:      Nuvoton_8051_Keil_uVision_Driver.dll V3.09
 Dialog DLL:      TP51.DLL V2.60.0.0
  
 <h2>Project:</h2>
-D:\Nuvuton\MS51_Series_BSP_Keil_V1.00.004\MS51FB9AE_MS51XB9AE_MS51XB9BE\SampleCode\MyProjects\Timer2_AutoReload_Capture\Keil\Capture.uvproj
-Project File Date:  08/23/2022
+D:\nuvuton\MS51_Series_BSP_Keil_V1.00.004\MS51FB9AE_MS51XB9AE_MS51XB9BE\SampleCode\MyProjects\nuvuton_RF_capture\Keil\Capture.uvproj
+Project File Date:  08/25/2022
 
 <h2>Output:</h2>
 Build target 'Timer2_Capture'
 compiling Capture.c...
 compiling IR.c...
-compiling millis.c...
-compiling board.c...
-compiling button.c...
-compiling sys.c...
-compiling watchdog.c...
 linking...
-Program Size: data=88.1 xdata=0 code=2840
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  PAIR_FLAG
+    MODULE:  .\Output\IR.obj (IR)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  PAIR_FLAG
+    MODULE:  .\Output\IR.obj (IR)
+    ADDRESS: 0AC1H
+Program Size: data=121.1 xdata=256 code=4570
 creating hex file from ".\Output\Capture"...
 User command #1: ..\..\..\..\Library\Startup\exe\hex2bin.exe  .\output\Capture.hex
-".\Output\Capture" - 0 Error(s), 0 Warning(s).
+".\Output\Capture" - 0 Error(s), 2 Warning(s).
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

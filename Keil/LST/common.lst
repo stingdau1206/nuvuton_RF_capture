@@ -1,0 +1,50 @@
+C51 COMPILER V9.60.0.0   COMMON                                                            08/25/2022 11:54:18 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE COMMON
+OBJECT MODULE PLACED IN .\Output\common.obj
+COMPILER INVOKED BY: C:\Keil_v5_8051\C51\BIN\C51.EXE ..\..\..\..\Library\StdDriver\src\common.c OPTIMIZE(8,SPEED) BROWSE
+                    - INCDIR(..\..\..\..\Library\Device\Include;..\..\..\..\Library\StdDriver\inc;..\..\Timer2_AutoReload_Capture) DEFINE(FOS
+                    -C_160000) DEBUG OBJECTEXTEND PRINT(.\LST\common.lst) TABS(2) OBJECT(.\Output\common.obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2019 Nuvoton Technology Corp. All rights reserved.                                        
+             - */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          #include "MS51_16K.h"
+   8          #include "common.h"
+   9          /**
+  10           * @brief       Read Dataflash
+  11           * @param       Dataflash start address
+  12           * @return      Dataflash Value
+  13           * @details     None
+  14           */
+  15          unsigned char Read_APROM_BYTE(unsigned int *u16_addr)
+  16          {
+  17   1          unsigned char rdata;
+  18   1          rdata = *u16_addr >> 8;
+  19   1          return rdata;
+  20   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =      7    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

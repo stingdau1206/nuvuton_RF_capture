@@ -5,6 +5,8 @@
 ".\Output\button.obj",
 ".\Output\sys.obj",
 ".\Output\watchdog.obj",
+".\Output\eeprom.obj",
+".\Output\common.obj",
 ".\Output\STARTUP.obj" 
 TO ".\Output\Capture" 
 PRINT(".\LST\Capture.m51") RAMSIZE(256) 
